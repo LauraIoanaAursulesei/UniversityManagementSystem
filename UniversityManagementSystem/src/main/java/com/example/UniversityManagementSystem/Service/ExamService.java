@@ -16,7 +16,7 @@ public class ExamService {
         this.examRepository = examRepository;
     }
 
-    public void registerExam(Exam registerExamDTO) {
+    public Exam registerExam(Exam registerExamDTO) {
 
         Exam exam = Exam.builder()
                 .description(registerExamDTO.getDescription())
@@ -27,9 +27,10 @@ public class ExamService {
                 .build();
 
         examRepository.save(exam);
+        return exam;
     }
 
-    public void updateExam(Exam newExam) throws NotFoundException {
+    public Exam updateExam(Exam newExam) throws NotFoundException {
 
         Exam exam = examRepository.findById(newExam.getId()).orElseThrow(() -> new NotFoundException("Exam not found"));
 
@@ -48,7 +49,7 @@ public class ExamService {
         if (newExam.getExamHour() != null)
             exam.setExamHour(newExam.getExamHour());
 
-        examRepository.save(exam);
+        return examRepository.save(exam);
     }
 
     public void removeExam(Long examId) throws NotFoundException {

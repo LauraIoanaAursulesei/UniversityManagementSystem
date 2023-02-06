@@ -1,5 +1,6 @@
 package com.example.UniversityManagementSystem.Service;
 
+import com.example.UniversityManagementSystem.Exceptions.AlreadyInUseException;
 import com.example.UniversityManagementSystem.Exceptions.NotFoundException;
 import com.example.UniversityManagementSystem.Model.Course;
 import com.example.UniversityManagementSystem.Repository.CourseRepository;
@@ -7,6 +8,7 @@ import com.example.UniversityManagementSystem.Repository.ProfessorRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseService {
@@ -19,8 +21,15 @@ public class CourseService {
         this.professorRepository = professorRepository;
     }
 
+    public boolean isCourseNameUnique(String name) {
+        return courseRepository.findByName(name).isEmpty();
+    }
 
-    public void registerCourse(Course newCourse) {
+
+    public Course registerCourse(Course newCourse) throws AlreadyInUseException{
+        if (!isCourseNameUnique(newCourse.getName())) {
+            throw new AlreadyInUseException("This course already exists");
+        }
 
         //TODO verific ca nu mai exista un curs cu acelasi nume
 
@@ -33,11 +42,16 @@ public class CourseService {
                 .build();
 
         courseRepository.save(course);
+        return course;
 
     }
 
-    public void updateCourse(Course newCourse) throws NotFoundException {
+    public Course updateCourse(Course newCourse) throws NotFoundException, AlreadyInUseException {
         Course course = courseRepository.findById(newCourse.getId()).orElseThrow(() -> new NotFoundException("Course not found"));
+
+        if (!isCourseNameUnique(newCourse.getName())) {
+            throw new AlreadyInUseException("A course with this name already exists");
+        }
 
         if (newCourse.getName() != null)
             course.setName(newCourse.getName());
@@ -50,7 +64,8 @@ public class CourseService {
 
         if (newCourse.getSemester() != null)
             course.setSemester(newCourse.getSemester());
-        courseRepository.save(course);
+
+        return courseRepository.save(course);
     }
 
     public void removeCourse(Long courseId) throws NotFoundException {
@@ -67,9 +82,9 @@ public class CourseService {
         return courses;
     }
 
-    public List<Course> getAllCoursesByName(String courseName) throws NotFoundException {
+    public Optional<Course> getCourseByName(String courseName) throws NotFoundException {
 
-        List<Course> courses = courseRepository.findAllByName(courseName);
+        Optional<Course> courses = courseRepository.findByName(courseName);
 
         if (courses.isEmpty())
             throw new NotFoundException("Course / Courses Not Found");

@@ -16,7 +16,7 @@ public class HomeworkService {
         this.homeworkRepository = homeworkRepository;
     }
 
-    public void registerHomework(Homework newHomework) {
+    public Homework registerHomework(Homework newHomework) {
 
         Homework homework = Homework.builder()
                 .description(newHomework.getDescription())
@@ -25,9 +25,10 @@ public class HomeworkService {
                 .build();
 
         homeworkRepository.save(homework);
+        return homework;
     }
 
-    public void updateHomework(Homework newHomework) throws NotFoundException {
+    public Homework updateHomework(Homework newHomework) throws NotFoundException {
 
         Homework homework = homeworkRepository.findById(newHomework.getId()).orElseThrow(() -> new NotFoundException("Homework not found"));
 
@@ -40,7 +41,7 @@ public class HomeworkService {
         if (newHomework.getPoints() != null)
             homework.setPoints(newHomework.getPoints());
 
-        homeworkRepository.save(homework);
+        return homeworkRepository.save(homework);
     }
 
     public void removeHomework(Long homeworkId) throws NotFoundException {
@@ -53,7 +54,7 @@ public class HomeworkService {
         return homework;
     }
 
-    public List<Homework> getAllHomeworks() throws NotFoundException {
+    public List<Homework> getAllHomework() throws NotFoundException {
 
         if (homeworkRepository.findAll().isEmpty())
             throw new NotFoundException("There are no homeworks to display");
