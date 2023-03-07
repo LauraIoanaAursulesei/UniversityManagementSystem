@@ -34,4 +34,16 @@ public class Course {
     @Column(name = "year")
     private String year;
 
+    @OneToMany(mappedBy = "course",orphanRemoval = true,cascade = {CascadeType.ALL})
+    List<Participants> patricipantsList;
+
+    @OneToMany(mappedBy = "course",orphanRemoval = true,cascade = {CascadeType.ALL})
+    List<Exam> examList;
+
+    @OneToMany(mappedBy = "course",orphanRemoval = true,cascade = {CascadeType.ALL})
+    List<Homework> homeworkList;
+
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    private Professor professor;
+
 }

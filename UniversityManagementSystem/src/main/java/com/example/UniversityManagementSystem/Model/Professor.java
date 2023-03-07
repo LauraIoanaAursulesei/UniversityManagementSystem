@@ -36,4 +36,7 @@ public class Professor {
     @Column(name = "phone")
     private String phone;
 
+    @OneToMany(mappedBy = "professor",orphanRemoval = true,cascade = {CascadeType.ALL})
+    List<Course> courseList;
+
 }

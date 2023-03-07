@@ -28,4 +28,7 @@ public class Homework {
     @Column(name = "points")
     private Long points;
 
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    private Course course;
+
 }

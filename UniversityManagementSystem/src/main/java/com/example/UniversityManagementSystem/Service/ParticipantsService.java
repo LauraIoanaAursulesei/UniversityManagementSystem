@@ -12,5 +12,4 @@ public class ParticipantsService {
         this.participantsRepository = participantsRepository;
     }
 
-    public Participants registerParticipant(Participants newParticipant)
 }

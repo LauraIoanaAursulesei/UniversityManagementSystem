@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -32,4 +34,7 @@ public class Exam {
 
     @Column(name = "examHour")
     private String examHour;
+
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    private Course course;
 }

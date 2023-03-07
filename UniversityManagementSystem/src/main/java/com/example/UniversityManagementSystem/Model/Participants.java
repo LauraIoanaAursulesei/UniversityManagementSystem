@@ -21,4 +21,10 @@ public class Participants {
 
     @Column(name = "courseGrade")
     private Long courseGrade;
+
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    private Course course;
+
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    private Student student;
 }

@@ -48,4 +48,7 @@ public class Student {
     @Column(name = "department")
     private String department;
 
+    @OneToMany(mappedBy = "student",orphanRemoval = true,cascade = {CascadeType.ALL})
+    List<Participants> participantsList;
+
 }
